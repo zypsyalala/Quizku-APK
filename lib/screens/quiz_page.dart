@@ -21,9 +21,9 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    // Acak soal dan ambil 10 soal dari bank soal berdasarkan kategori
+    // Acak soal dan ambil 25 soal dari bank soal berdasarkan kategori
     quizQuestions = List<Question>.from(questionBank[widget.category] ?? [])..shuffle();
-    quizQuestions = quizQuestions.take(10).toList();
+    quizQuestions = quizQuestions.take(25).toList();
   }
 
   void _onAnswerSelected(int selectedIndex) {

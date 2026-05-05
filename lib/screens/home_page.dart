@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  'Uji pengetahuanmu dengan 10 soal acak dari kategori yang kamu pilih!',
+                  'Uji pengetahuanmu dengan 25 soal acak dari kategori yang kamu pilih!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
