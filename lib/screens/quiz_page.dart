@@ -10,10 +10,19 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  late List<Question> quizQuestions;
   int _currentQuestionIndex = 0;
   int _score = 0;
   bool _answered = false;
   int? _selectedAnswerIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    // Acak soal dan ambil 10 soal dari bank soal
+    quizQuestions = List<Question>.from(allQuestions)..shuffle();
+    quizQuestions = quizQuestions.take(10).toList();
+  }
 
   void _onAnswerSelected(int selectedIndex) {
     if (_answered) return; // Cegah jawab lebih dari sekali
