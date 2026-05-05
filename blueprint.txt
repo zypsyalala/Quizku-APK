@@ -1,0 +1,93 @@
+=== BLUEPRINT APLIKASI QUIZ FLUTTER ===
+Nama Aplikasi:
+Quiz App Sederhana
+Deskripsi:
+Aplikasi mobile berbasis Flutter yang digunakan untuk mengerjakan soal quiz pilihan ganda, menampilkan skor, dan memberikan feedback jawaban.
+________________________________________
+1.	FITUR UTAMA
+•	Halaman Home (Mulai Quiz)
+•	Halaman Quiz (Soal & Pilihan Jawaban)
+•	Sistem Penilaian (Skor)
+•	Halaman Hasil (Result Screen)
+________________________________________
+2.	STRUKTUR HALAMAN
+[1] Home Page
+•	Judul aplikasi
+•	Tombol: "Mulai Quiz"
+[2] Quiz Page
+•	Menampilkan:
+o	Pertanyaan
+o	4 pilihan jawaban
+•	Tombol Next / otomatis lanjut
+•	(Optional: Timer)
+[3] Result Page
+•	Menampilkan skor akhir
+•	Pesan (contoh: "Bagus!" / "Coba lagi")
+•	Tombol: "Ulangi Quiz"
+________________________________________
+3.	FLOW APLIKASI
+START
+↓
+Home Page
+↓ (Klik "Mulai Quiz")
+Quiz Page (Soal 1 → Soal 2 → dst)
+↓
+Result Page
+↓
+(Ulangi / Kembali ke Home)
+________________________________________
+4.	STRUKTUR FILE FLUTTER
+lib/
+│
+├── main.dart
+├── models/
+│ └── question_model.dart
+│
+├── screens/
+│ ├── home_page.dart
+│ ├── quiz_page.dart
+│ └── result_page.dart
+│
+└── widgets/
+└── answer_button.dart
+________________________________________
+5.	STRUKTUR DATA (QUESTION MODEL)
+•	questionText (String)
+•	answers (List)
+•	correctAnswerIndex (int)
+Contoh:
+{
+questionText: "Apa kepanjangan HTML?",
+answers: [
+"Hyper Tool Markup Language",
+"Hyper Text Markup Language",
+"Home Tool Markup Language",
+"Hyperlinks Text Mark Language"
+],
+correctAnswerIndex: 1
+}
+________________________________________
+6.	LOGIC APLIKASI
+•	Simpan index soal saat ini
+•	Simpan skor user
+•	Saat user pilih jawaban:
+→ cek benar/salah
+→ tambah skor jika benar
+→ lanjut ke soal berikutnya
+•	Jika soal habis:
+→ pindah ke Result Page
+________________________________________
+7.	FITUR TAMBAHAN (OPSIONAL)
+•	Timer per soal
+•	Random soal
+•	Kategori quiz
+•	Warna indikator benar/salah
+•	Simpan skor (local storage)
+________________________________________
+8.	TARGET MINIMUM (BIAR LULUS)
+•	Navigasi antar halaman berjalan
+•	Soal tampil dengan benar
+•	Skor dihitung dengan benar
+•	UI sederhana tapi rapi
+________________________________________
+SELESAI
