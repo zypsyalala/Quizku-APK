@@ -3,7 +3,9 @@ import '../models/question_model.dart';
 import 'result_page.dart';
 
 class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
+  final QuizCategory category;
+
+  const QuizPage({super.key, required this.category});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -19,8 +21,8 @@ class _QuizPageState extends State<QuizPage> {
   @override
   void initState() {
     super.initState();
-    // Acak soal dan ambil 10 soal dari bank soal
-    quizQuestions = List<Question>.from(allQuestions)..shuffle();
+    // Acak soal dan ambil 10 soal dari bank soal berdasarkan kategori
+    quizQuestions = List<Question>.from(questionBank[widget.category] ?? [])..shuffle();
     quizQuestions = quizQuestions.take(10).toList();
   }
 

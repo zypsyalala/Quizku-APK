@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_page.dart';
+import '../models/question_model.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -48,11 +49,8 @@ class HomePage extends StatelessWidget {
                   letterSpacing: 2,
                 ),
               ),
-              const SizedBox(height: 12),
-
-              // Deskripsi
               const Text(
-                'Quiz Pemrograman & IT',
+                'Pilih Kategori Quiz',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,
@@ -64,9 +62,7 @@ class HomePage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
-                  'Uji pengetahuanmu seputar dunia pemrograman, '
-                  'teknologi informasi, dan komputer. '
-                  '10 soal acak dari bank soal menanti!',
+                  'Uji pengetahuanmu dengan 10 soal acak dari kategori yang kamu pilih!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -75,46 +71,30 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 32),
 
-              // Badge kategori
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.16),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.code, color: Colors.white70, size: 18),
-                    SizedBox(width: 6),
-                    Text(
-                      'Kategori: Pemrograman',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-
-              // Tombol Mulai Quiz
+              // Tombol Kategori Pemrograman
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 48),
                 child: SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
+                  child: ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const QuizPage(),
+                          builder: (context) => const QuizPage(category: QuizCategory.programming),
                         ),
                       );
                     },
+                    icon: const Icon(Icons.code),
+                    label: const Text(
+                      'Pemrograman',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: Colors.deepPurple,
@@ -124,12 +104,41 @@ class HomePage extends StatelessWidget {
                       ),
                       elevation: 4,
                     ),
-                    child: const Text(
-                      'Mulai Quiz',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Tombol Kategori Agama Islam
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const QuizPage(category: QuizCategory.islamic),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.mosque),
+                    label: const Text(
+                      'Agama Islam',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.green.shade700,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 4,
                     ),
                   ),
                 ),
