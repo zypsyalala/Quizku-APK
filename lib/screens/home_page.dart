@@ -52,14 +52,54 @@ class HomePage extends StatelessWidget {
 
               // Deskripsi
               const Text(
-                'Uji pengetahuanmu dengan\nquiz pilihan ganda!',
+                'Quiz Pemrograman & IT',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white70,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  'Uji pengetahuanmu seputar dunia pemrograman, '
+                  'teknologi informasi, dan komputer. '
+                  '10 soal acak dari bank soal menanti!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white70,
+                    height: 1.5,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Badge kategori
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.16),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.code, color: Colors.white70, size: 18),
+                    SizedBox(width: 6),
+                    Text(
+                      'Kategori: Pemrograman',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 40),
 
               // Tombol Mulai Quiz
               Padding(
