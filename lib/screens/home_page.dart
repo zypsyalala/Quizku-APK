@@ -27,7 +27,7 @@ class HomePage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: Colors.white.withAlpha(40),
+                  color: Colors.white.withOpacity(0.16),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
