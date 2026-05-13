@@ -96,8 +96,8 @@ class _ResultPageState extends State<ResultPage> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              resultColor.withOpacity(0.78),
-              resultColor.withOpacity(0.47),
+              resultColor.withValues(alpha: 0.78),
+              resultColor.withValues(alpha: 0.47),
             ],
           ),
         ),
@@ -109,7 +109,7 @@ class _ResultPageState extends State<ResultPage> {
               Container(
                 padding: const EdgeInsets.all(28),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -136,7 +136,7 @@ class _ResultPageState extends State<ResultPage> {
                 'Kategori: ${_getCategoryName()}',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.white.withOpacity(0.85),
+                  color: Colors.white.withValues(alpha: 0.85),
                 ),
               ),
               const SizedBox(height: 24),
@@ -148,7 +148,7 @@ class _ResultPageState extends State<ResultPage> {
                   vertical: 20,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Column(
@@ -182,7 +182,7 @@ class _ResultPageState extends State<ResultPage> {
                     vertical: 12,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
+                    color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Row(
