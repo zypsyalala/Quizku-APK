@@ -1,19 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/question_model.dart';
 import 'home_page.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
   final int score;
   final int totalQuestions;
+  final QuizCategory category;
 
   const ResultPage({
     super.key,
     required this.score,
     required this.totalQuestions,
+    required this.category,
   });
+
+  @override
+  State<ResultPage> createState() => _ResultPageState();
+}
+
+class _ResultPageState extends State<ResultPage> {
+  int? _highScore;
+  bool _isNewHighScore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAndSaveScore();
+  }
+
+  // Simpan skor ke local storage & cek apakah skor tertinggi baru
+  Future<void> _loadAndSaveScore() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = 'highscore_${widget.category.name}';
+    final savedHighScore = prefs.getInt(key) ?? 0;
+
+    if (widget.score > savedHighScore) {
+      // Skor baru lebih tinggi → simpan
+      await prefs.setInt(key, widget.score);
+      setState(() {
+        _highScore = widget.score;
+        _isNewHighScore = true;
+      });
+    } else {
+      setState(() {
+        _highScore = savedHighScore;
+        _isNewHighScore = false;
+      });
+    }
+  }
 
   // Menentukan pesan dan emoji berdasarkan persentase skor
   String _getMessage() {
-    double percentage = (score / totalQuestions) * 100;
+    double percentage = (widget.score / widget.totalQuestions) * 100;
     if (percentage >= 80) return 'Luar Biasa! 🎉';
     if (percentage >= 60) return 'Bagus! 👍';
     return 'Coba Lagi! 💪';
@@ -21,7 +60,7 @@ class ResultPage extends StatelessWidget {
 
   // Menentukan warna berdasarkan persentase skor
   Color _getColor() {
-    double percentage = (score / totalQuestions) * 100;
+    double percentage = (widget.score / widget.totalQuestions) * 100;
     if (percentage >= 80) return Colors.green;
     if (percentage >= 60) return Colors.orange;
     return Colors.red;
@@ -29,10 +68,20 @@ class ResultPage extends StatelessWidget {
 
   // Menentukan icon berdasarkan persentase skor
   IconData _getIcon() {
-    double percentage = (score / totalQuestions) * 100;
+    double percentage = (widget.score / widget.totalQuestions) * 100;
     if (percentage >= 80) return Icons.emoji_events;
     if (percentage >= 60) return Icons.thumb_up_alt;
     return Icons.refresh;
+  }
+
+  // Nama kategori yang ditampilkan
+  String _getCategoryName() {
+    switch (widget.category) {
+      case QuizCategory.programming:
+        return 'Pemrograman';
+      case QuizCategory.islamic:
+        return 'Agama Islam';
+    }
   }
 
   @override
@@ -80,6 +129,16 @@ class ResultPage extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+              const SizedBox(height: 8),
+
+              // Nama kategori
+              Text(
+                'Kategori: ${_getCategoryName()}',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white.withOpacity(0.85),
+                ),
+              ),
               const SizedBox(height: 24),
 
               // Skor
@@ -103,7 +162,7 @@ class ResultPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '$score / $totalQuestions',
+                      '${widget.score} / ${widget.totalQuestions}',
                       style: const TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.bold,
@@ -113,7 +172,42 @@ class ResultPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 48),
+              const SizedBox(height: 16),
+
+              // === Skor Tertinggi (dari local storage) ===
+              if (_highScore != null)
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _isNewHighScore ? Icons.star : Icons.workspace_premium,
+                        color: Colors.amber,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _isNewHighScore
+                            ? '🎊 Skor Tertinggi Baru!'
+                            : 'Skor Tertinggi: $_highScore',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 40),
 
               // Tombol Ulangi Quiz
               Padding(
