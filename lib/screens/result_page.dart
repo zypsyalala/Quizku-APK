@@ -10,6 +10,7 @@ class ResultPage extends StatefulWidget {
   final int totalQuestions;
   final QuizCategory category;
   final int elapsedSeconds;
+  final int questionCount;
 
   const ResultPage({
     super.key,
@@ -17,13 +18,15 @@ class ResultPage extends StatefulWidget {
     required this.totalQuestions,
     required this.category,
     required this.elapsedSeconds,
+    required this.questionCount,
   });
 
   @override
   State<ResultPage> createState() => _ResultPageState();
 }
 
-class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateMixin {
+class _ResultPageState extends State<ResultPage>
+    with SingleTickerProviderStateMixin {
   int? _highScore;
   bool _isNewHighScore = false;
   late AnimationController _animController;
@@ -34,7 +37,6 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     super.initState();
     _loadAndSaveScore();
 
-    // Animate the circular progress
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -72,11 +74,11 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
 
   String _getMessage() {
-    double percentage = (widget.score / widget.totalQuestions) * 100;
-    if (percentage >= 80) return 'Luar Biasa! Pertahankan\nprestasimu. 🎉';
-    if (percentage >= 60) return 'Bagus! Pertahankan\nprestasimu. 👍';
-    if (percentage >= 40) return 'Lumayan! Terus\ntingkatkan lagi. 💪';
-    return 'Jangan menyerah!\nCoba lagi ya. 🔥';
+    double pct = (widget.score / widget.totalQuestions) * 100;
+    if (pct >= 80) return 'Luar Biasa! Pertahankan\nprestasimu.';
+    if (pct >= 60) return 'Bagus! Pertahankan\nprestasimu.';
+    if (pct >= 40) return 'Lumayan! Terus\ntingkatkan lagi.';
+    return 'Jangan menyerah!\nCoba lagi ya.';
   }
 
   String _getCategoryName() {
@@ -91,19 +93,18 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
   }
 
   String _formatTime(int totalSeconds) {
-    final minutes = totalSeconds ~/ 60;
-    final seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    final m = totalSeconds ~/ 60;
+    final s = totalSeconds % 60;
+    return '${m.toString().padLeft(2, '0')}:${s.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-    final int scorePercent = ((widget.score / widget.totalQuestions) * 100).round();
+    final int scorePercent =
+        ((widget.score / widget.totalQuestions) * 100).round();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F6FA),
-
-      // === App Bar ===
       appBar: AppBar(
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
@@ -120,33 +121,13 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
             color: Color(0xFF1E2A5E),
           ),
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E2A5E),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFF4F46E5).withValues(alpha: 0.3),
-                width: 2,
-              ),
-            ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-        ],
+        actions: const [],
       ),
-
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
                   // === Main Result Card ===
@@ -166,7 +147,6 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                     ),
                     child: Column(
                       children: [
-                        // Trophy icon
                         Icon(
                           _isNewHighScore
                               ? Icons.emoji_events_rounded
@@ -175,14 +155,21 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                           color: const Color(0xFFD4A017),
                         ),
                         const SizedBox(height: 12),
-
-                        // "Quiz Selesai!" title
                         const Text(
                           'Quiz Selesai!',
                           style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
                             color: Color(0xFF1E2A5E),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _getCategoryName(),
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey.shade500,
                           ),
                         ),
                         const SizedBox(height: 28),
@@ -277,7 +264,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                   ),
                   const SizedBox(height: 12),
 
-                  // === Stats Row: Waktu + Benar ===
+                  // === Stats Row ===
                   Row(
                     children: [
                       Expanded(
@@ -299,7 +286,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                   ),
 
                   // === New High Score badge ===
-                  if (_isNewHighScore) ...[
+                  if (_highScore != null) ...[
                     const SizedBox(height: 12),
                     Container(
                       width: double.infinity,
@@ -325,7 +312,9 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Skor Tertinggi Baru! 🎊',
+                            _isNewHighScore
+                                ? 'Skor Tertinggi Baru!'
+                                : 'Skor Tertinggi: $_highScore',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
@@ -347,7 +336,10 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => QuizPage(category: widget.category),
+                            builder: (context) => QuizPage(
+                              category: widget.category,
+                              questionCount: widget.questionCount,
+                            ),
                           ),
                         );
                       },
@@ -439,11 +431,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.leaderboard_rounded),
-                  label: 'Leagues',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded),
-                  label: 'Profile',
+                  label: 'Skor',
                 ),
               ],
             ),
@@ -453,7 +441,6 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
     );
   }
 
-  // === Stat Box Widget ===
   Widget _buildStatBox({
     required IconData icon,
     required String label,
@@ -471,11 +458,7 @@ class _ResultPageState extends State<ResultPage> with SingleTickerProviderStateM
       ),
       child: Column(
         children: [
-          Icon(
-            icon,
-            size: 24,
-            color: const Color(0xFF4F46E5),
-          ),
+          Icon(icon, size: 24, color: const Color(0xFF4F46E5)),
           const SizedBox(height: 8),
           Text(
             label,
@@ -519,7 +502,6 @@ class _ScoreRingPainter extends CustomPainter {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width - strokeWidth) / 2;
 
-    // Background ring
     final bgPaint = Paint()
       ..color = bgColor
       ..style = PaintingStyle.stroke
@@ -528,7 +510,6 @@ class _ScoreRingPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Foreground arc
     final fgPaint = Paint()
       ..color = fgColor
       ..style = PaintingStyle.stroke
@@ -538,7 +519,7 @@ class _ScoreRingPainter extends CustomPainter {
     final sweepAngle = 2 * pi * progress;
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -pi / 2, // start from top
+      -pi / 2,
       sweepAngle,
       false,
       fgPaint,

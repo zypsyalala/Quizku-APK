@@ -6,8 +6,9 @@ import 'result_page.dart';
 
 class QuizPage extends StatefulWidget {
   final QuizCategory category;
+  final int questionCount;
 
-  const QuizPage({super.key, required this.category});
+  const QuizPage({super.key, required this.category, this.questionCount = 25});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -34,7 +35,7 @@ class _QuizPageState extends State<QuizPage> {
   void initState() {
     super.initState();
     quizQuestions = List<Question>.from(questionBank[widget.category] ?? [])..shuffle();
-    quizQuestions = quizQuestions.take(25).toList();
+    quizQuestions = quizQuestions.take(widget.questionCount).toList();
     _stopwatch.start();
     _startTimer();
   }
@@ -106,6 +107,7 @@ class _QuizPageState extends State<QuizPage> {
             totalQuestions: quizQuestions.length,
             category: widget.category,
             elapsedSeconds: _stopwatch.elapsed.inSeconds,
+            questionCount: widget.questionCount,
           ),
         ),
       );
@@ -154,26 +156,7 @@ class _QuizPageState extends State<QuizPage> {
             color: Color(0xFF1E2A5E),
           ),
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: const Color(0xFF1E2A5E),
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFF4F46E5).withValues(alpha: 0.3),
-                width: 2,
-              ),
-            ),
-            child: const Icon(
-              Icons.person_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-        ],
+        actions: const [],
       ),
 
       body: Column(
@@ -428,11 +411,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.leaderboard_rounded),
-                  label: 'Leagues',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded),
-                  label: 'Profile',
+                  label: 'Skor',
                 ),
               ],
             ),
